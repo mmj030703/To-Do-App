@@ -1,0 +1,223 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins&display=swap');
+
+:root {
+    --bg-color: #7b68ee;
+    --primary-color: #ffc000;
+    --primary-font: 'Poppins', sans-serif;
+}
+
+*,
+::before,
+::after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    background-color: var(--bg-color);
+}
+
+.todo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px 0px 30px 0px;
+    width: 100%;
+}
+
+.todo-container h1 {
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+    font-size: 3.5rem;
+    color: #fff;
+}
+
+.todo-container .todo-header {
+    display: flex;
+    align-items: center;
+    margin: 50px 0px 0px 0px;
+}
+
+.todo-container .todo-header #todo-input {
+    font-family: var(--primary-font);
+    font-size: 1.5rem;
+    outline: none;
+    border: none;
+    border-radius: 25px;
+    padding: 0px 15px 0px 15px;
+    height: 50px;
+    line-height: 50px;
+}
+
+.todo-container .todo-header .addTask {
+    padding: 8px;
+    margin: 0px 0px 0px 20px;
+    border-radius: 50%;
+    border: none;
+    transition: all .1s ease;
+}
+
+.addTask:hover {
+    background-color: var(--primary-color);
+}
+
+.todo-container .todo-header .addTask:hover .addIcon {
+    color: var(--primary-color);
+    background-color: #fff;
+}
+
+.todo-container .todo-header .addTask .addIcon {
+    font-size: 2rem;
+    font-family: var(--primary-font);
+    color: #fff;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    font-weight: bolder;
+    width: 33px;
+    margin: 0px 0px 0px 0px;
+}
+
+.todo-list {
+    display: grid;
+    place-items: center;
+    grid-template-columns: 1fr;
+    row-gap: 15px;
+    margin: 30px 0px 0px 0px;
+    width: 100%;
+}
+
+.task {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    padding: 5px 0px 0px 0px;
+    border-radius: 25px;
+    transition: all .4s ease-in-out;
+    width: 80%;
+}
+
+.task .taskContent {
+    font-family: var(--primary-font);
+    font-size: 1.4rem;
+    padding: 10px 40px 30px 20px;
+}
+
+
+.task .task-buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.task .task-buttons button {
+    font-size: 1.3rem;
+    border: none;
+    height: 35px;
+    color: #fff;
+    width: 100%;
+}
+
+.task .task-buttons button:first-child {
+    font-size: 1.5rem;
+    background-color: var(--primary-color);
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+}
+
+.task .task-buttons button:last-child {
+    border-top-right-radius: 21px;
+    border-bottom-right-radius: 21px;
+    background-color: #b3a9a9;
+}
+
+.task .task-buttons button i.fa-check {
+    font-family: 'font Awesome 6 Free';
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 4px;
+}
+
+.task .task-buttons button i.fa-trash {
+    padding: 0px 7px;
+}
+
+button {
+    cursor: pointer;
+}
+
+.checked {
+    background-color: #46ee46;
+    opacity: .5;
+}
+
+.line-through {
+    text-decoration: line-through;
+}
+
+.slide {
+    animation: slide .5s ease-in 1 forwards;
+}
+
+@keyframes slide {
+    to {
+        transform: translateX(10%);
+        opacity: 0;
+    }
+}
+
+
+
+/* ///////////////////////////////////////////////////////// */
+
+/* ///////////////////////////////////////////////////////// */
+
+@media screen and (max-width: 550px) {
+    .todo-container h1 {
+        font-size: 3rem;
+    }
+
+    .todo-container .todo-header #todo-input {
+        font-size: 1rem;
+        height: 40px;
+        line-height: 40px;
+    }
+
+    .todo-container .todo-header .addTask {
+        padding: 6px;
+        margin: 0px 0px 0px 10px;
+    }
+
+    .todo-container .todo-header .addTask .addIcon {
+        font-size: 1.4rem;
+        width: 26px;
+    }
+
+    .task {
+        border-radius: 20px;
+    }
+
+    .task .taskContent {
+        font-size: 1rem;
+    }
+
+    .task .task-buttons button {
+        font-size: .8rem;
+        height: 25px;
+        width: 100%;
+    }
+
+    .task .task-buttons button.checkBtn {
+        font-size: 1.1rem;
+    }
+
+    .task .task-buttons button i {
+        width: 100%;
+    }
+
+    .task .task-buttons button i.fa-check {
+        color: #fff;
+    }
+}
