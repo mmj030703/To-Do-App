@@ -3,9 +3,10 @@
 const taskInput = document.querySelector('#todo-input');
 const addTaskBtn = document.querySelector('.addTask');
 const taskList = document.querySelector('.todo-list');
-const taskContentList = [];
 
-const addTask = () => {
+const taskContentList = JSON.parse(localStorage.getItem('todos')) || [];
+
+const addTask = (e) => {
     const taskInputValue = taskInput.value.trim();
     //* Corner Case if user clicks without writing task in input.
     if (taskInputValue === '') {
@@ -17,11 +18,22 @@ const addTask = () => {
         taskInput.value = '';
     }
     else {
-        taskContentList.push(taskInputValue);
-        const task = createTaskElement(taskInputValue);
-        taskList.append(task);
+        taskContentList.push({
+            taskInputValue: taskInputValue,
+            taskChecked: false              // keeps the status of whether the task is checked or not
+        });
+
+        //* Updating the localStorage with current taskContentList
+        localStorage.setItem('todos', JSON.stringify(taskContentList));
+
+        createTaskElement(taskInputValue);
         taskInput.value = '';
     }
+}
+
+//* Appends the task into the DOM
+const appendTask = (task) => {
+    taskList.append(task);
 }
 
 //* checks if the current input value is already present in the list or not. 
@@ -40,14 +52,27 @@ const createTaskElement = (taskInputValue) => {
                       <button class="deleteBtn"><i class="fa fa-trash"></i></button>
                     </div>
                 `;
+    appendTask(task);
     return task;
 }
 
 //* delete taskContent from the list as user deletes this task.
 const deleteTextContent = (toDeleteContent) => {
     //
-    const index = taskContentList.indexOf(toDeleteContent);
-    taskContentList.splice(index, 1);
+    let indexVal;
+
+    //* Finding the index which is to be deleted.
+    for (let index in taskContentList) {
+        if (taskContentList[index].taskInputValue === toDeleteContent) {
+            indexVal = index;
+            break;
+        }
+    }
+
+    taskContentList.splice(indexVal, 1);
+
+    //* Updating the localStorage with the current taskContentList.
+    localStorage.setItem('todos', JSON.stringify(taskContentList));
 }
 
 //* make changes to task container if users clicks check btn or delete btn.
@@ -59,6 +84,20 @@ const doneOrDeleteTask = (eventObj) => {
     if (clickedItem.matches(".checkBtn") || clickedItem.matches(".fa-check")) {
         task.classList.toggle("checked");
         taskName.classList.toggle("line-through");
+
+        //* Updating the taskChecked value of the task on which the user has clicked.
+        taskContentList.forEach(taskObj => {
+            if (taskObj.taskInputValue === taskName.textContent) {
+                if (taskObj.taskChecked) {
+                    taskObj.taskChecked = false;
+                }
+                else {
+                    taskObj.taskChecked = true;
+                }
+                //* Updating the localStorage with the current taskContentList.
+                localStorage.setItem('todos', JSON.stringify(taskContentList));
+            }
+        });
     }
     else if (clickedItem.matches(".deleteBtn") || clickedItem.matches(".fa-trash")) {
         task.classList.add("slide");
@@ -69,8 +108,30 @@ const doneOrDeleteTask = (eventObj) => {
     }
 }
 
+//* Function for appending the task at start when user reloads the Page.
+const appendAtStart = (task) => {
+    const taskElement = createTaskElement(task);
+    const taskName = taskElement.firstElementChild;
+
+    //* As page is reloaded then every task is appended as new so making them checked if they were before loading as per the localStorage.
+    taskContentList.forEach(taskObj => {
+        if (taskObj.taskInputValue === taskName.textContent) {
+            if (taskObj.taskChecked) {
+                taskElement.classList.toggle("checked");
+                taskName.classList.toggle("line-through");
+            }
+        }
+    });
+}
+
+//* At start calling this function for every object so that the user can see all the task which were present before reload.
+taskContentList.forEach(taskObj => {
+    appendAtStart(taskObj.taskInputValue);
+});
+
 // oncliking or pressing enter add task button
 addTaskBtn.addEventListener('click', addTask);
+
 taskInput.addEventListener('keypress', (eventObj) => {
     if (eventObj.key === "Enter") {
         addTask();
